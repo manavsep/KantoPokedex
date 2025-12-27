@@ -17,6 +17,7 @@ class _PokedexPageState extends State<PokedexPage> {
   List<Pokemon> database=[];
   List<Pokemon> filtered=[];
 
+
   @override
   void initState(){
     super.initState();
@@ -42,6 +43,17 @@ class _PokedexPageState extends State<PokedexPage> {
       pokemons = poke;
       database = pokemons;
       isLoading=false;
+    });
+  }
+
+  void searchPokedex(String query){
+    List<Pokemon> filteredList = database;
+    if (query.isNotEmpty) {
+      filteredList = filteredList.where((pokemon) =>
+      pokemon.name.toLowerCase().contains(query.toLowerCase())||pokemon.id.toString().contains(query)).toList();
+    }
+    setState(() {
+      pokemons = filteredList;
     });
   }
 
@@ -77,96 +89,123 @@ class _PokedexPageState extends State<PokedexPage> {
           ),
           centerTitle: true,
         ),
-        body:Expanded(
-          child: isLoading
-              ?Center(
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
-            ),
-          )
-              :ListView.builder(
-              itemCount: pokemons.length,
-              itemBuilder: (context,index){
-                final pokemon = pokemons[index];
-                final types = (pokemon.types).join(", ").toUpperCase();
-                final id=pokemon.id.toString();
-                return Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Column(
-                    children: [
-                      ListTile(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(20.0),
-                              topRight: Radius.circular(20.0),
-                            )
-                        ),
-                        tileColor: Colors.green,
-                        leading: CircleAvatar(
-                          radius: 35,
-                          backgroundImage: NetworkImage(pokemon.sprite),
-                        ),
-                        title: Text(
-                          pokemon.name.toUpperCase(),
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        subtitle: Text(
-                          "Type(s): $types",
-                          style: TextStyle(
-                            color: Colors.grey[200],
-                          ),
-                        ),
-                        trailing: Text(
-                          "#$id",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
-                        ),
-                      ),
-                      CheckboxListTile(
-                          title: Text(
-                              "Encountered",
-                              style: TextStyle(
-                                color:Colors.grey[200],
-                              )
-                          ),
-                          tileColor: Colors.green,
-                          value: pokemon.encountered,
-                          onChanged: (value){
-                            int idno = int.parse(id);
-                            encounterBox(value!, idno);
-                          }
-                      ),
-                      CheckboxListTile(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(20.0),
-                                bottomRight: Radius.circular(20.0),
-                              )
-                          ),
-                          title: Text(
-                              "Captured",
-                              style: TextStyle(
-                                color:Colors.grey[200],
-                              )
-                          ),
-                          tileColor: Colors.green,
-                          value: pokemon.captured,
-                          onChanged: (value){
-                            int idno = int.parse(id);
-                            captureBox(value!, idno);
-                          }
-                      ),
-                    ],
+        body:Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.all(8),
+              child: Container(
+                height: 50,
+                decoration: BoxDecoration(
+                  color: Colors.white70,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Search here',
+                    hintStyle: TextStyle(
+                      color: Colors.grey[600],
+                    ),
+                    contentPadding: EdgeInsets.all(10),
                   ),
-                );
-              }
-          ),
+                  onChanged: (value){
+                    searchPokedex(value);
+                  },
+                ),
+              ),
+            ),
+            SizedBox(height:4),
+            Expanded(
+              child: isLoading
+                  ?Center(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+                ),
+              )
+                  :ListView.builder(
+                  itemCount: pokemons.length,
+                  itemBuilder: (context,index){
+                    final pokemon = pokemons[index];
+                    final types = (pokemon.types).join(", ").toUpperCase();
+                    final id=pokemon.id.toString();
+                    return Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Column(
+                        children: [
+                          ListTile(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(20.0),
+                                  topRight: Radius.circular(20.0),
+                                )
+                            ),
+                            tileColor: Colors.green,
+                            leading: CircleAvatar(
+                              radius: 35,
+                              backgroundImage: NetworkImage(pokemon.sprite),
+                            ),
+                            title: Text(
+                              pokemon.name.toUpperCase(),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            subtitle: Text(
+                              "Type(s): $types",
+                              style: TextStyle(
+                                color: Colors.grey[200],
+                              ),
+                            ),
+                            trailing: Text(
+                              "#$id",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                          CheckboxListTile(
+                              title: Text(
+                                  "Encountered",
+                                  style: TextStyle(
+                                    color:Colors.grey[200],
+                                  )
+                              ),
+                              tileColor: Colors.green,
+                              value: pokemon.encountered,
+                              onChanged: (value){
+                                int idno = int.parse(id);
+                                encounterBox(value!, idno);
+                              }
+                          ),
+                          CheckboxListTile(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(20.0),
+                                    bottomRight: Radius.circular(20.0),
+                                  )
+                              ),
+                              title: Text(
+                                  "Captured",
+                                  style: TextStyle(
+                                    color:Colors.grey[200],
+                                  )
+                              ),
+                              tileColor: Colors.green,
+                              value: pokemon.captured,
+                              onChanged: (value){
+                                int idno = int.parse(id);
+                                captureBox(value!, idno);
+                              }
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+              ),
+            ),
+          ],
         )
     );
   }
