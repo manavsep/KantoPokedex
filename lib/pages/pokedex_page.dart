@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kantopokedex/models/pokemon.dart';
 import 'package:kantopokedex/services/poke_api.dart';
 import 'package:kantopokedex/storage/local_storage.dart';
+import 'package:kantopokedex/utils/listing.dart';
 
 class PokedexPage extends StatefulWidget {
   const PokedexPage({super.key});
@@ -15,7 +16,39 @@ class _PokedexPageState extends State<PokedexPage> {
   List<Pokemon> pokemons=[];
   bool isLoading=false;
   List<Pokemon> database=[];
-  List<Pokemon> filtered=[];
+
+  final List<String> types = [
+    "All Types",
+    "Bug",
+    "Dark",
+    "Dragon",
+    "Electric",
+    "Fairy",
+    "Fighting",
+    "Fire",
+    "Flying",
+    "Ghost",
+    "Grass",
+    "Ground",
+    "Ice",
+    "Normal",
+    "Poison",
+    "Psychic",
+    "Rock",
+    "Steel",
+    "Water",
+  ];
+  final List<String> status = [
+    "All",
+    "Encountered",
+    "Captured",
+    "Not encountered",
+    "Not captured",
+  ];
+
+  String searchQuery = '';
+  String selectedType = '';
+  String statusPoke='';
 
 
   @override
@@ -47,11 +80,56 @@ class _PokedexPageState extends State<PokedexPage> {
   }
 
   void searchPokedex(String query){
+    setState(() {
+      searchQuery = query;
+      applyFilters();
+    });
+  }
+  void filterByType(String type) {
+    setState(() {
+      if (type == "All Types") {
+        selectedType = '';  // Reset to show all Pokémon types
+      } else {
+        selectedType = type;  // Apply selected type
+      }
+      applyFilters();
+    });
+  }
+  void filterByStatus(String stat){
+    setState(() {
+      statusPoke=stat;
+      applyFilters();
+    });
+  }
+
+
+  void applyFilters() {
     List<Pokemon> filteredList = database;
-    if (query.isNotEmpty) {
+
+    if (searchQuery.isNotEmpty) {
       filteredList = filteredList.where((pokemon) =>
-      pokemon.name.toLowerCase().contains(query.toLowerCase())||pokemon.id.toString().contains(query)).toList();
+      pokemon.name.toLowerCase().contains(searchQuery.toLowerCase())||pokemon.id.toString().contains(searchQuery)).toList();
     }
+
+    if (selectedType.isNotEmpty) {
+      filteredList = filteredList.where((pokemon) =>
+          pokemon.types.contains(selectedType.toLowerCase())).toList();
+    }
+
+    if (statusPoke=="Encountered"){
+      filteredList = filteredList.where((pokemon) =>
+      pokemon.encountered==true).toList();
+    }else if (statusPoke=="Not encountered"){
+      filteredList = filteredList.where((pokemon) =>
+      pokemon.encountered==false).toList();
+    }else if (statusPoke=="Captured"){
+      filteredList = filteredList.where((pokemon) =>
+      pokemon.captured==true).toList();
+    }else if (statusPoke=="Not captured"){
+      filteredList = filteredList.where((pokemon) =>
+      pokemon.captured==false).toList();
+    }
+
     setState(() {
       pokemons = filteredList;
     });
@@ -62,6 +140,7 @@ class _PokedexPageState extends State<PokedexPage> {
       final p = database.firstWhere((p) => p.id == id);
       p.encountered = value;
       LocalStorage.addPoke(p);
+      applyFilters();
     });
   }
 
@@ -70,6 +149,7 @@ class _PokedexPageState extends State<PokedexPage> {
       final p = database.firstWhere((p) => p.id == id);
       p.captured = value;
       LocalStorage.addPoke(p);
+      applyFilters();
     });
   }
 
@@ -114,6 +194,40 @@ class _PokedexPageState extends State<PokedexPage> {
               ),
             ),
             SizedBox(height:4),
+            Row(
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Container(
+                    color: Colors.white70,
+                    child: DropdownMenu(
+                      onSelected: (value){
+                        filterByType(value!);
+                      },
+                      menuHeight: 666,
+                      initialSelection: "All Types",
+                      dropdownMenuEntries: types.map((type)=>
+                          DropdownMenuEntry<String>(value: type, label:type)).toList(),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Container(
+                    color: Colors.white70,
+                    child: DropdownMenu(
+                      onSelected: (value){
+                        filterByStatus(value!);
+                      },
+                      menuHeight: 250,
+                      initialSelection: "All",
+                      dropdownMenuEntries: status.map((s)=>
+                          DropdownMenuEntry<String>(value: s, label:s)).toList(),
+                    ),
+                  ),
+                ),
+              ],
+            ),
             Expanded(
               child: isLoading
                   ?Center(
@@ -127,80 +241,12 @@ class _PokedexPageState extends State<PokedexPage> {
                     final pokemon = pokemons[index];
                     final types = (pokemon.types).join(", ").toUpperCase();
                     final id=pokemon.id.toString();
-                    return Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Column(
-                        children: [
-                          ListTile(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(20.0),
-                                  topRight: Radius.circular(20.0),
-                                )
-                            ),
-                            tileColor: Colors.green,
-                            leading: CircleAvatar(
-                              radius: 35,
-                              backgroundImage: NetworkImage(pokemon.sprite),
-                            ),
-                            title: Text(
-                              pokemon.name.toUpperCase(),
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            subtitle: Text(
-                              "Type(s): $types",
-                              style: TextStyle(
-                                color: Colors.grey[200],
-                              ),
-                            ),
-                            trailing: Text(
-                              "#$id",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                              ),
-                            ),
-                          ),
-                          CheckboxListTile(
-                              title: Text(
-                                  "Encountered",
-                                  style: TextStyle(
-                                    color:Colors.grey[200],
-                                  )
-                              ),
-                              tileColor: Colors.green,
-                              value: pokemon.encountered,
-                              onChanged: (value){
-                                int idno = int.parse(id);
-                                encounterBox(value!, idno);
-                              }
-                          ),
-                          CheckboxListTile(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(20.0),
-                                    bottomRight: Radius.circular(20.0),
-                                  )
-                              ),
-                              title: Text(
-                                  "Captured",
-                                  style: TextStyle(
-                                    color:Colors.grey[200],
-                                  )
-                              ),
-                              tileColor: Colors.green,
-                              value: pokemon.captured,
-                              onChanged: (value){
-                                int idno = int.parse(id);
-                                captureBox(value!, idno);
-                              }
-                          ),
-                        ],
-                      ),
+                    return Listing(
+                        pokemon: pokemon,
+                        types: types,
+                        id: id,
+                        encounterBox: encounterBox,
+                        captureBox: captureBox
                     );
                   }
               ),
