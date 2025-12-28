@@ -31,7 +31,7 @@ class Listing extends StatelessWidget {
                   topRight: Radius.circular(20.0),
                 )
             ),
-            tileColor: Colors.green,
+            tileColor: Color(0xFFDAD4C4),
             leading: CircleAvatar(
               radius: 35,
               backgroundImage: NetworkImage(pokemon.sprite),
@@ -39,20 +39,20 @@ class Listing extends StatelessWidget {
             title: Text(
               pokemon.name.toUpperCase(),
               style: TextStyle(
-                color: Colors.white,
+                color: Color(0xFF2E2E2E),
                 fontWeight: FontWeight.bold,
               ),
             ),
             subtitle: Text(
               "Type(s): $types",
               style: TextStyle(
-                color: Colors.grey[200],
+                color: Color(0xFF5E6A5E),
               ),
             ),
             trailing: Text(
               "#$id",
               style: TextStyle(
-                color: Colors.white,
+                color: Color(0xFF8B8B8B),
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
               ),
@@ -72,10 +72,16 @@ class Listing extends StatelessWidget {
               title: Text(
                   "Encountered",
                   style: TextStyle(
-                    color:Colors.grey[200],
+                    color:Color(0xFF6E6E6E),
                   )
               ),
-              tileColor: Colors.green,
+              activeColor: Color(0xFF388E3C),
+              checkColor: Color(0xFFFFFFFF),
+              side: BorderSide(
+                color: Color(0xFF7A7A7A),
+                width: 2,
+              ),
+              tileColor: Color(0xFFDAD4C4),
               value: pokemon.encountered,
               onChanged: (value){
                 int idno = int.parse(id);
@@ -92,10 +98,16 @@ class Listing extends StatelessWidget {
               title: Text(
                   "Captured",
                   style: TextStyle(
-                    color:Colors.grey[200],
+                    color:Color(0xFF6E6E6E),
                   )
               ),
-              tileColor: Colors.green,
+              activeColor: Color(0xFF388E3C),
+              checkColor: Color(0xFFFFFFFF),
+              side: BorderSide(
+                color: Color(0xFF7A7A7A),
+                width: 2,
+              ),
+              tileColor: Color(0xFFDAD4C4),
               value: pokemon.captured,
               onChanged: (value){
                 int idno = int.parse(id);

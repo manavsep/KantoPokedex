@@ -156,9 +156,10 @@ class _PokedexPageState extends State<PokedexPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.lightGreen,
+        backgroundColor: Color(0xFFF0EAD6),
         appBar: AppBar(
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.red[700],
+          automaticallyImplyLeading: false,
           title: Text(
               "Kanto Pokédex",
               style:TextStyle(
@@ -176,14 +177,15 @@ class _PokedexPageState extends State<PokedexPage> {
               child: Container(
                 height: 50,
                 decoration: BoxDecoration(
-                  color: Colors.white70,
-                  borderRadius: BorderRadius.circular(8),
+                  color: Color(0xFFFFFDF7),
+                  borderRadius: BorderRadius.circular(10),
+                  border: BoxBorder.all(color: Color(0xFFC8C2B0))
                 ),
                 child: TextField(
                   decoration: InputDecoration(
                     hintText: 'Search here',
                     hintStyle: TextStyle(
-                      color: Colors.grey[600],
+                      color: Color(0xFF8A8A8A),
                     ),
                     contentPadding: EdgeInsets.all(10),
                   ),
@@ -201,7 +203,11 @@ class _PokedexPageState extends State<PokedexPage> {
                   padding: EdgeInsets.fromLTRB(10, 4, 4, 4),
                   child: Container(
                     width: 150,
-                    color: Colors.white70,
+                    decoration: BoxDecoration(
+                      color: Color(0xFFFFFDF7),
+                      borderRadius: BorderRadius.circular(10),
+                      border: BoxBorder.all(color: Color(0xFFC8C2B0))
+                    ),
                     child: DropdownMenu(
                       onSelected: (value){
                         filterByType(value!);
@@ -217,7 +223,11 @@ class _PokedexPageState extends State<PokedexPage> {
                   padding: EdgeInsets.all(4),
                   child: Container(
                     width:150,
-                    color: Colors.white70,
+                    decoration: BoxDecoration(
+                        color: Color(0xFFFFFDF7),
+                        borderRadius: BorderRadius.circular(10),
+                        border: BoxBorder.all(color: Color(0xFFC8C2B0))
+                    ),
                     child: DropdownMenu(
                       onSelected: (value){
                         filterByStatus(value!);
@@ -254,7 +264,7 @@ class _PokedexPageState extends State<PokedexPage> {
                   }
               ),
             ),
-            SizedBox(height: 50),
+            SizedBox(height: 40),
           ],
         )
     );

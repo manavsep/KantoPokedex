@@ -23,14 +23,14 @@ class _PokeDetailPageState extends State<PokeDetailPage> {
   final AudioPlayer player = AudioPlayer();
 
   Map<String,dynamic> colorType={
-    "Bug" : Colors.green,
+    "Bug" : Colors.lightGreen,
     "Dark" : Colors.black,
     "Dragon" : Colors.red[700],
     "Electric" : Colors.amber,
     "Fairy" : Colors.pinkAccent,
     "Fighting" : Colors.red[300],
     "Fire" : Colors.deepOrangeAccent,
-    "Flying" : Colors.white,
+    "Flying" : Colors.cyan,
     "Ghost" : Colors.purple,
     "Grass" : Colors.greenAccent,
     "Ground" : Colors.brown,
@@ -38,12 +38,12 @@ class _PokeDetailPageState extends State<PokeDetailPage> {
     "Normal" : Colors.grey,
     "Poison" : Colors.green[900],
     "Psychic" : Colors.purple[900],
-    "Rock" : Colors.green,
+    "Rock" : Colors.brown[900],
     "Steel" : Colors.blueGrey,
     "Water" : Colors.blue,
   };
 
-  List<String> useBlacktxt =["Electric","Flying","Grass"];
+  List<String> useWhitetxt =["Dark","Fairy","Flying","Ground","Poison","Psychic","Rock","Steel","Water"];
 
 
   @override
@@ -70,9 +70,9 @@ class _PokeDetailPageState extends State<PokeDetailPage> {
     final po = widget.pokemon;
 
     return Scaffold(
-      backgroundColor: Colors.lightGreen,
+      backgroundColor: Color(0xFFF0EAD6),
       appBar: AppBar(
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.red[700],
         title: Text(
             po.name.toUpperCase(),
             style:TextStyle(
@@ -83,7 +83,7 @@ class _PokeDetailPageState extends State<PokeDetailPage> {
         ),
         leading: IconButton(
           onPressed: (){
-            Navigator.push(
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context)=>PokedexPage()),
             );
@@ -98,7 +98,7 @@ class _PokeDetailPageState extends State<PokeDetailPage> {
           Center(
             child: CircleAvatar(
               radius:104,
-              backgroundColor: Colors.redAccent,
+              backgroundColor: Colors.red,
               child: CircleAvatar(
                 backgroundImage: NetworkImage(po.sprite),
                 radius: 100,
@@ -110,16 +110,16 @@ class _PokeDetailPageState extends State<PokeDetailPage> {
             child: Text(
               "#${po.id} - ${po.name.toUpperCase()}",
               style: TextStyle(
-                color: Colors.red[100],
+                color: Color(0xFF2E2E2E),
                 fontWeight: FontWeight.bold,
-                fontSize: 40,
+                fontSize: 35,
               ),
             ),
           ),
           Divider(
             height: 60,
             thickness: 2,
-            color: Colors.white,
+            color: Color(0xFFC8C2B0),
           ),
           Row(
             children: [
@@ -129,7 +129,7 @@ class _PokeDetailPageState extends State<PokeDetailPage> {
                 style: TextStyle(
                   fontSize: 25,
                   fontWeight: FontWeight.bold,
-                  color: Colors.red[100],
+                  color: Color(0xFF2E2E2E),
                 ),
               ),
               Wrap(
@@ -144,7 +144,7 @@ class _PokeDetailPageState extends State<PokeDetailPage> {
                     child: Text(
                       t,
                       style: TextStyle(
-                        color: useBlacktxt.contains(t) ? Colors.black : Colors.white,
+                        color: useWhitetxt.contains(t) ? Colors.white : Colors.black,
                         fontSize: 20,
                       ),
                     )
@@ -158,7 +158,37 @@ class _PokeDetailPageState extends State<PokeDetailPage> {
             indent: 80,
             endIndent: 80,
             thickness: 2,
-            color: Colors.white,
+            color: Color(0xFFC8C2B0),
+          ),
+          Padding(
+            padding: EdgeInsets.fromLTRB(10, 0, 10, 5),
+            child: Column(
+              children: [
+                Text(
+                  "Height :   ${po.height.toDouble()/10} m",
+                  style: TextStyle(
+                    fontSize: 20,
+                    color:Color(0xFF4A4A4A),
+                    fontWeight: FontWeight.bold,
+                  )
+                ),
+                Text(
+                    "Weight :   ${po.weight.toDouble()/10} kg",
+                    style: TextStyle(
+                      fontSize: 20,
+                      color:Color(0xFF4A4A4A),
+                      fontWeight: FontWeight.bold,
+                    )
+                ),
+              ],
+            ),
+          ),
+          Divider(
+            height: 40,
+            indent: 80,
+            endIndent: 80,
+            thickness: 2,
+            color: Color(0xFFC8C2B0),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -170,7 +200,7 @@ class _PokeDetailPageState extends State<PokeDetailPage> {
                   style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.bold,
-                    color: Colors.red[100],
+                    color: Color(0xFF2E2E2E),
                   ),
                 ),
               ),
@@ -188,21 +218,21 @@ class _PokeDetailPageState extends State<PokeDetailPage> {
                         Text(
                           t.key,
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Color(0xFF6E6E6E),
                             fontSize: 20,
                           ),
                         ),
                         Text(
                           "-",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Color(0xFF6E6E6E),
                             fontSize: 20,
                           ),
                         ),
                         Text(
                           t.value.toString(),
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Color(0xFF6E6E6E),
                             fontSize: 20,
                           ),
                         ),
@@ -216,7 +246,7 @@ class _PokeDetailPageState extends State<PokeDetailPage> {
                 indent: 80,
                 endIndent: 80,
                 thickness: 2,
-                color: Colors.white,
+                color: Color(0xFFC8C2B0),
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -228,7 +258,7 @@ class _PokeDetailPageState extends State<PokeDetailPage> {
                       style: TextStyle(
                         fontSize: 25,
                         fontWeight: FontWeight.bold,
-                        color: Colors.red[100],
+                        color: Color(0xFF2E2E2E),
                       ),
                     ),
                   ),
@@ -241,7 +271,7 @@ class _PokeDetailPageState extends State<PokeDetailPage> {
                         child: Text(
                           "\u2022 $t",
                           style: TextStyle(
-                            color: isHidden?Colors.purple:Colors.white,
+                            color: isHidden?Colors.red[800]:Color(0xFF6E6E6E),
                             fontSize: 20,
                             fontStyle: isHidden?FontStyle.italic:FontStyle.normal,
                           ),
@@ -254,7 +284,7 @@ class _PokeDetailPageState extends State<PokeDetailPage> {
                     indent: 80,
                     endIndent: 80,
                     thickness: 2,
-                    color: Colors.white,
+                    color: Color(0xFFC8C2B0),
                   ),
                   Wrap(
                     children: [
@@ -263,11 +293,17 @@ class _PokeDetailPageState extends State<PokeDetailPage> {
                               "Encountered :",
                               style: TextStyle(
                                 fontSize: 20,
-                                color:Colors.white,
+                                color:Color(0xFF6E6E6E),
                                 fontWeight: FontWeight.bold,
                               )
                           ),
                           value: po.encountered,
+                          activeColor: Color(0xFF388E3C),
+                          checkColor: Color(0xFFFFFFFF),
+                          side: BorderSide(
+                            color: Color(0xFF7A7A7A),
+                            width: 2,
+                          ),
                           onChanged: (value){
                             setState(() {
                               po.encountered=value!;
@@ -280,11 +316,17 @@ class _PokeDetailPageState extends State<PokeDetailPage> {
                               "Captured :",
                               style: TextStyle(
                                 fontSize: 20,
-                                color:Colors.white,
+                                color:Color(0xFF6E6E6E),
                                 fontWeight: FontWeight.bold,
                               )
                           ),
                           value: po.captured,
+                          activeColor: Color(0xFF388E3C),
+                          checkColor: Color(0xFFFFFFFF),
+                          side: BorderSide(
+                            color: Color(0xFF7A7A7A),
+                            width: 2,
+                          ),
                           onChanged: (value){
                             setState(() {
                               po.captured=value!;
@@ -297,15 +339,13 @@ class _PokeDetailPageState extends State<PokeDetailPage> {
                   Divider(
                     height: 60,
                     thickness: 2,
-                    color: Colors.white,
+                    color: Color(0xFFC8C2B0),
                   ),
                   SizedBox(height:40),
                 ]
               ),
             ]
           )
-
-
         ],
       ),
     );
