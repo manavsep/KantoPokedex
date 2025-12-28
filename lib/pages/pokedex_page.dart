@@ -113,7 +113,7 @@ class _PokedexPageState extends State<PokedexPage> {
 
     if (selectedType.isNotEmpty) {
       filteredList = filteredList.where((pokemon) =>
-          pokemon.types.contains(selectedType.toLowerCase())).toList();
+          pokemon.types.contains(selectedType)).toList();
     }
 
     if (statusPoke=="Encountered"){
@@ -195,16 +195,18 @@ class _PokedexPageState extends State<PokedexPage> {
             ),
             SizedBox(height:4),
             Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Padding(
-                  padding: EdgeInsets.all(8),
+                  padding: EdgeInsets.fromLTRB(10, 4, 4, 4),
                   child: Container(
+                    width: 150,
                     color: Colors.white70,
                     child: DropdownMenu(
                       onSelected: (value){
                         filterByType(value!);
                       },
-                      menuHeight: 666,
+                      menuHeight: 500,
                       initialSelection: "All Types",
                       dropdownMenuEntries: types.map((type)=>
                           DropdownMenuEntry<String>(value: type, label:type)).toList(),
@@ -212,8 +214,9 @@ class _PokedexPageState extends State<PokedexPage> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(8),
+                  padding: EdgeInsets.all(4),
                   child: Container(
+                    width:150,
                     color: Colors.white70,
                     child: DropdownMenu(
                       onSelected: (value){
@@ -251,6 +254,7 @@ class _PokedexPageState extends State<PokedexPage> {
                   }
               ),
             ),
+            SizedBox(height: 50),
           ],
         )
     );

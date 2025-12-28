@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kantopokedex/models/pokemon.dart';
+import 'package:kantopokedex/pages/poke_detail_page.dart';
 
 class Listing extends StatelessWidget {
   final Pokemon pokemon;
@@ -56,6 +57,16 @@ class Listing extends StatelessWidget {
                 fontSize: 20,
               ),
             ),
+            onTap: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context)=>PokeDetailPage(
+                  pokemon: pokemon,
+                  encounterBox: encounterBox,
+                  captureBox: captureBox,
+                )),
+              );
+            },
           ),
           CheckboxListTile(
               title: Text(
